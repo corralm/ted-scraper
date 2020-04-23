@@ -1,16 +1,12 @@
 # TED-Talks-Scraper
----
 💬 Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Requirements
----
-Python 3.4
-BeautifulSoup
+[Python 3](https://www.python.org/downloads/)  
+[BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)
 
 ## Usage
----
 ```
-# from ted_talks.scraper import TEDScraper
 # instantiate the scraper
 scraper_es = TEDscraper(lang='es', urls='all', exclude_transcript=False)
 
@@ -26,11 +22,9 @@ pd.to_csv('output/ted_talks.csv')
 Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html#serialization-io-conversion).
 
 ### Parameters
----
 * **Languages**
     * English is the default language `lang='en'`
     * You can pass in other languages using the `lang` param
-    * See the full list of language codes below under 'Languages'
     * TED translators don't always translate all features
         * Ex: Title and 'About Speaker' might be in English while the transcript is translated to French
 * **URLs** 
@@ -43,7 +37,6 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
     * You can exclude scraping the transcript by setting `exclude_transcript` to 'True'
 
 ## Features
----
 
 | Feature          | Description                                   | Data Type  |
 |------------------|-----------------------------------------------|------------|
@@ -70,7 +63,6 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
 *The dictionary key maps to the speaker in ‘speakers’.
 
 ## Languages
----
 TED talks have been subtitled in over 100 languages. Here are the top languages:
 
 | Code  | Language              |
@@ -93,5 +85,4 @@ Here is a link to [all language codes available as of April 2020](languages.md).
 You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
 
 ## Acknowledgements
----
 The data has been scraped from the official TED Website and is available under the Creative Commons License.
