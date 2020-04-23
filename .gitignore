@@ -1,0 +1,31 @@
+# VS Code files
+.vscode/*
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+.DS_Store
+
+# Spark
+*.snappy.parquet*
+*.crc
+_SUCCESS
+
+# Jupyter checkpoints
+.ipynb_checkpoints
+*checkpoint.*
+
+# pickles
+*.pkl
+*.pickle
+
+# Tableau
+*.twbr
+
+# Large files
+data/311_Cases.csv
+P5_SF311.twbx
+encampments_map_outdoors.mov
+encampments_map.mov
+data/sf_311_raw.csv
