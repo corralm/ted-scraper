@@ -1,4 +1,4 @@
-# TEDscraper
+# TED-Talks-Scraper
 Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Requirements
@@ -6,25 +6,25 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 [BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)
 
 ## Usage
-```
+```python
 # instantiate the scraper
-scraper_es = TEDscraper(lang='es', urls='all', exclude_transcript=False)
+scraper = TEDscraper(lang_code='en', urls='all', exclude_transcript=False)
 
-# scrape the data; returns dictionary
-ted_dict = scraper_es.get_data()
+# scrape the data
+ted_dict = scraper.get_data()
 
-# transform to pandas DataFrame
+# transform dict to pandas DataFrame
 df = pd.DataFrame.from_dict(ted_dict, orient='index')
 
 # output as CSV
-pd.to_csv('output/ted_talks.csv')
+df.to_csv('../data/ted_talks.csv', index=False)
 ```
 Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html#serialization-io-conversion).
 
 ### Parameters
 * **Languages**
-    * English is the default language `lang='en'`
-    * You can pass in other languages using the `lang` param
+    * English is the default language `lang_code='en'`
+    * You can pass in other language codes using the `lang_code` param
     * TED translators don't always translate all features
         * Ex: Title and 'About Speaker' might be in English while the transcript is translated to French
 * **URLs** 
@@ -80,7 +80,7 @@ TED talks have been subtitled in over 100 languages. Here are the top languages:
 | ru    | Russian               |
 | he    | Hebrew                |
 
-Here is a link to [all language codes available as of April 2020](languages.md).
+Here is a link to [all language codes available as of April 2020](../data/languages.csv).
 
 You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
 
