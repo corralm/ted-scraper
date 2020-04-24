@@ -4,6 +4,7 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
 [BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)
+[Jupyter Notebook](https://jupyter.org/)
 
 ## Usage
 ```python
@@ -86,3 +87,7 @@ You can see all the talks for each language at [TED – Our Languages](https://w
 
 ## Acknowledgements
 The data has been scraped from the official TED Website and is available under the Creative Commons License.
+
+## License
+This project is licensed under the terms of the
+[MIT license](/LICENSE).
