@@ -1,38 +1,9 @@
-# TED-Talks-Scraper
-💬 scrape transcripts &amp; other features from your favorite TED talks
+# Languages
 
-## Features
+Specify a language using the `lang` param.  
+Here is a list of all the languages available as of April 2020:
 
-| Feature          | Description                                   | Data Type  |
-|------------------|-----------------------------------------------|------------|
-| talk_id          | Talk identification number provided by TED    | int        |
-| title            | Title of the talk                             | string     |
-| speakers         | Speakers in the talk (may be multiple)        | dictionary |
-| occupations      | *Occupations of the speakers (may be multiple) | dictionary |
-| about_speakers   | *Blurb about each speaker (may be multiple)    | dictionary |
-| views            | Count of views                                | int        |
-| recorded_date    | Date the talk was recorded                    | string     |
-| published_date   | Date the talk was published to TED.com        | string     |
-| event            | Event or medium in which the talk was given   | string     |
-| native_lang      | Language the talk was given in                | string     |
-| available_lang   | All available languages for a talk            | list       |
-| comments         | Count of comments                             | int        |
-| duration         | Duration in %M%S format                       | string     |
-| duration_sec     | Duration in seconds                           | int        |
-| topic_tags       | Related tags or topics for the talk           | list       |
-| talk_description | Description of the talk                       | string     |
-| related_talks    | Related talks                                 | dictionary |
-| talk_url         | Url of the talk                               | string     |
-| transcript       | Full transcript of the talk                   | string     |
-
-*The dictionary key maps to the speaker in ‘speakers’.
-
-## Languages
-TED talks have been subtitled in over 100 languages. You can see the most updated list of talks [here](https://www.ted.com/participate/translate/our-languages 'TED languages').
-
-Below is a list of languages available:  
-
-| code       | language              |
+| Code       | Language              |
 |------------|-----------------------|
 | af         | Afrikaans             |
 | sq         | Albanian              |

@@ -1,5 +1,40 @@
 # TED-Talks-Scraper
-💬 scrape transcripts &amp; other features from your favorite TED talks
+Scrape TED talk data including transcripts in over 100 languages from TED.com
+
+## Requirements
+[Python 3](https://www.python.org/downloads/)  
+[BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)
+
+## Usage
+```
+# instantiate the scraper
+scraper_es = TEDscraper(lang='es', urls='all', exclude_transcript=False)
+
+# scrape the data; returns dictionary
+ted_dict = scraper_es.get_data()
+
+# transform to pandas DataFrame
+df = pd.DataFrame.from_dict(ted_dict, orient='index')
+
+# output as CSV
+pd.to_csv('output/ted_talks.csv')
+```
+Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html#serialization-io-conversion).
+
+### Parameters
+* **Languages**
+    * English is the default language `lang='en'`
+    * You can pass in other languages using the `lang` param
+    * TED translators don't always translate all features
+        * Ex: Title and 'About Speaker' might be in English while the transcript is translated to French
+* **URLs** 
+    * All urls are scraped by default for the selected language `urls='all'`
+    * You may pass in a list of urls using the `urls` param. However, there are a few limitations:
+        * TED must have the talks available in the language you specify
+        * Only one language can be provided per scrape call
+* **Features**
+    * All features are scraped by default
+    * You can exclude scraping the transcript by setting `exclude_transcript` to 'True'
 
 ## Features
 
@@ -28,124 +63,26 @@
 *The dictionary key maps to the speaker in ‘speakers’.
 
 ## Languages
-TED talks have been subtitled in over 100 languages. You can see the most updated list of talks [here](https://www.ted.com/participate/translate/our-languages 'TED languages').
+TED talks have been subtitled in over 100 languages. Here are the top languages:
 
-Below is a list of languages available:  
+| Code  | Language              |
+|-------|-----------------------|
+| en    | English               |
+| es    | Spanish               |
+| pt-br | Portuguese (Brazil)   |
+| fr    | French                |
+| it    | Italian               |
+| zh-cn | Chinese (simplified)  |
+| zh-tw | Chinese (traditional) |
+| ko    | Korean                |
+| ja    | Japanese              |
+| tr    | Turkish               |
+| ru    | Russian               |
+| he    | Hebrew                |
 
-| code       | language              |
-|------------|-----------------------|
-| af         | Afrikaans             |
-| sq         | Albanian              |
-| arq        | Algerian Arabic       |
-| am         | Amharic               |
-| ar         | Arabic                |
-| hy         | Armenian              |
-| as         | Assamese              |
-| ast        | Asturian              |
-| az         | Azerbaijani           |
-| eu         | Basque                |
-| be         | Belarusian            |
-| bn         | Bengali               |
-| bi         | Bislama               |
-| bs         | Bosnian               |
-| bg         | Bulgarian             |
-| my         | Burmese               |
-| ca         | Catalan               |
-| ceb        | Cebuano               |
-| zh-cn      | Chinese, Simplified   |
-| zh-tw      | Chinese, Traditional  |
-| zh         | Chinese, Yue          |
-| ht         | Creole, Haitian       |
-| hr         | Croatian              |
-| cs         | Czech                 |
-| da         | Danish                |
-| nl         | Dutch                 |
-| dz         | Dzongkha              |
-| en         | English               |
-| eo         | Esperanto             |
-| et         | Estonian              |
-| fil        | Filipino              |
-| fi         | Finnish               |
-| fr         | French                |
-| fr-ca      | French (Canada)       |
-| gl         | Galician              |
-| ka         | Georgian              |
-| de         | German                |
-| el         | Greek                 |
-| gu         | Gujarati              |
-| cnh        | Hakha Chin            |
-| ha         | Hausa                 |
-| he         | Hebrew                |
-| hi         | Hindi                 |
-| hu         | Hungarian             |
-| hup        | Hupa                  |
-| is         | Icelandic             |
-| ig         | Igbo                  |
-| id         | Indonesian            |
-| inh        | Ingush                |
-| ga         | Irish                 |
-| it         | Italian               |
-| ja         | Japanese              |
-| kn         | Kannada               |
-| kk         | Kazakh                |
-| km         | Khmer                 |
-| tlh        | Klingon               |
-| ko         | Korean                |
-| ku         | Kurdish               |
-| ky         | Kyrgyz                |
-| lo         | Lao                   |
-| ltg        | Latgalian             |
-| la         | Latin                 |
-| lv         | Latvian               |
-| lt         | Lithuanian            |
-| lb         | Luxembourgish         |
-| rup        | Macedo                |
-| mk         | Macedonian            |
-| mg         | Malagasy              |
-| ms         | Malay                 |
-| ml         | Malayalam             |
-| mt         | Maltese               |
-| mr         | Marathi               |
-| mfe        | Mauritian Creole      |
-| mn         | Mongolian             |
-| srp        | Montenegrin           |
-| ne         | Nepali                |
-| nb         | Norwegian Bokmal      |
-| nn         | Norwegian Nynorsk     |
-| oc         | Occitan               |
-| ps         | Pashto                |
-| fa         | Persian               |
-| pl         | Polish                |
-| pt         | Portuguese            |
-| pt-br      | Portuguese, Brazilian |
-| pa         | Punjabi               |
-| ro         | Romanian              |
-| ru         | Russian               |
-| ry         | Rusyn                 |
-| sc         | Sardinian             |
-| sr         | Serbian               |
-| sh         | Serbo-Croatian        |
-| szl        | Silesian              |
-| si         | Sinhala               |
-| sk         | Slovak                |
-| sl         | Slovenian             |
-| so         | Somali                |
-| es         | Spanish               |
-| sw         | Swahili               |
-| sv         | Swedish               |
-| art-x-bork | Swedish Chef          |
-| tl         | Tagalog               |
-| tg         | Tajik                 |
-| ta         | Tamil                 |
-| tt         | Tatar                 |
-| te         | Telugu                |
-| th         | Thai                  |
-| bo         | Tibetan               |
-| aeb        | Tunisian Arabic       |
-| tr         | Turkish               |
-| tk         | Turkmen               |
-| uk         | Ukrainian             |
-| ur         | Urdu                  |
-| ug         | Uyghur                |
-| uz         | Uzbek                 |
-| vi         | Vietnamese            |
+Here is a link to [all language codes available as of April 2020](languages.md).
+
+You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
+
+## Acknowledgements
+The data has been scraped from the official TED Website and is available under the Creative Commons License.
