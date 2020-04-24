@@ -1,5 +1,5 @@
 # TED-Talks-Scraper
-💬 Scrape TED talk data including transcripts in over 100 languages from TED.com
+Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
