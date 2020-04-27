@@ -23,17 +23,20 @@ df.to_csv('../data/ted_talks.csv', index=False)
 Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html#serialization-io-conversion).
 
 ### Parameters
-* **Languages**
+* **lang_code**
     * English is the default language `lang_code='en'`
     * You can pass in other language codes using the `lang_code` param
     * TED translators don't always translate all features
         * Ex: Title and 'About Speaker' might be in English while the transcript is translated to French
-* **URLs** 
+* **urls** 
     * All urls are scraped by default for the selected language `urls='all'`
-    * You may pass in a list of urls using the `urls` param. However, there are a few limitations:
+    * You may pass in a list of urls. However, there are a few limitations:
         * TED must have the talks available in the language you specify
         * Only one language can be provided per scrape call
-* **Features**
+* **topics**
+    * All topics are scraped by default `topics='all'`
+    * You may pass in a list of topics to filter by them.
+* **exclude_transcript**
     * All features are scraped by default
     * You can exclude scraping the transcript by setting `exclude_transcript` to 'True'
 
