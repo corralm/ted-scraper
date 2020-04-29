@@ -3,7 +3,7 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
-[BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)
+[BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)  
 [Jupyter Notebook](https://jupyter.org/)
 
 ## Usage
@@ -35,34 +35,38 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
         * Only one language can be provided per scrape call
 * **topics**
     * All topics are scraped by default `topics='all'`
-    * You may pass in a list of topics to filter by them.
+    * You may pass in a list of topics to filter by them
+* **force_fetch**
+    * Talks with known issues are skipped by default `force_fetch=False`
+    * Set it to 'True' to attempt to scrape
+    * See [talks with known issues](../data/urls_issues.csv)
 * **exclude_transcript**
-    * All features are scraped by default
-    * You can exclude scraping the transcript by setting `exclude_transcript` to 'True'
+    * All features are scraped by default `exclude_transcript=False`
+    * Set it to 'True' to exclude the transcript
 
 ## Features
 
-| Feature          | Description                                   | Data Type  |
-|------------------|-----------------------------------------------|------------|
-| talk_id          | Talk identification number provided by TED    | int        |
-| title            | Title of the talk                             | string     |
-| speakers         | Speakers in the talk (may be multiple)        | dictionary |
-| occupations      | *Occupations of the speakers (may be multiple) | dictionary |
-| about_speakers   | *Blurb about each speaker (may be multiple)    | dictionary |
-| views            | Count of views                                | int        |
-| recorded_date    | Date the talk was recorded                    | string     |
-| published_date   | Date the talk was published to TED.com        | string     |
-| event            | Event or medium in which the talk was given   | string     |
-| native_lang      | Language the talk was given in                | string     |
-| available_lang   | All available languages for a talk            | list       |
-| comments         | Count of comments                             | int        |
-| duration         | Duration in %M%S format                       | string     |
-| duration_sec     | Duration in seconds                           | int        |
-| topic_tags       | Related tags or topics for the talk           | list       |
-| talk_description | Description of the talk                       | string     |
-| related_talks    | Related talks                                 | dictionary |
-| talk_url         | Url of the talk                               | string     |
-| transcript       | Full transcript of the talk                   | string     |
+| Feature          | Description                                     | Data Type  |
+|------------------|-------------------------------------------------|------------|
+| talk_id          | Talk identification number provided by TED      | int        |
+| title            | Title of the talk                               | string     |
+| speaker_1        | First speaker in TED's speaker list             | string     |
+| speakers         | Speakers in the talk (one or many)              | dictionary |
+| occupations      | *Occupations of the speakers (none, one or many)| dictionary |
+| about_speakers   | *Blurb about each speaker (none, one or many)   | dictionary |
+| views            | Count of views                                  | int        |
+| recorded_date    | Date the talk was recorded                      | string     |
+| published_date   | Date the talk was published to TED.com          | string     |
+| event            | Event or medium in which the talk was given     | string     |
+| native_lang      | Language the talk was given in                  | string     |
+| available_lang   | All available languages (lang_code) for a talk  | list       |
+| comments         | Count of comments                               | int        |
+| duration         | Duration in seconds                             | int        |
+| topics           | Related tags or topics for the talk             | list       |
+| description      | Description of the talk                         | string     |
+| related_talks    | Related talks (key='talk_id', value='title')    | dictionary |
+| url              | Url of the talk                                 | string     |
+| transcript       | Full transcript of the talk                     | string     |
 
 *The dictionary key maps to the speaker in ‘speakers’.
 
@@ -93,4 +97,4 @@ The data has been scraped from the official TED Website and is available under t
 
 ## License
 This project is licensed under the terms of the
-[MIT license](/LICENSE).
+[MIT license](LICENSE).
