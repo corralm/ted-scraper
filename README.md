@@ -9,7 +9,8 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 ## Usage
 ```python
 # instantiate the scraper
-scraper = TEDscraper(lang_code='en', urls='all', exclude_transcript=False)
+# pass in optional arguments
+scraper = TEDscraper(lang_code='en', urls='all', topics='all')
 
 # scrape the data
 ted_dict = scraper.get_data()
