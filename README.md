@@ -1,6 +1,8 @@
 # TED-Talks-Scraper
 Scrape TED talk data including transcripts in over 100 languages from TED.com
 
+![](header.png)
+
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
 [Requests](https://2.python-requests.org/en/master/)  
@@ -16,7 +18,7 @@ scraper = TEDscraper(lang_code='en', urls='all', topics='all')
 # scrape the data and save it to a dictionary
 ted_dict = scraper.get_data()
 
-# transform the dictionary to a pandas DataFrame
+# transform the dictionary to a sorted pandas DataFrame
 df = scraper.to_dataframe(ted_dict)
 
 # output DataFrame as CSV

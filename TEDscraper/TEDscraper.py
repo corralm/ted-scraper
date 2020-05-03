@@ -6,16 +6,13 @@
 # In[ ]:
 
 
-import pandas as pd
 import re
-
+import time
+import random
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-import time
-import random
-
-import pickle
+import pandas as pd
 
 
 # ## Soup Maker
@@ -113,52 +110,64 @@ class TalkFeatures(SoupMaker):
 
     def get_speaker_1(self, soup):
         """Returns the first speaker in TED's speaker list."""
-        speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
-        # convert to DataFrame
-        speakers_df = pd.read_json(speaker_tag)
-        full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
-                     + speakers_df.loc[:, 'middleinitial'] + ' '
-                     + speakers_df.loc[:, 'lastname'])
-        full_name_clean = full_name_raw.str.replace('\s+', ' ')
-        # transform series to a dict
-        speaker_1 = full_name_clean.iloc[0]
-        return speaker_1
+        try:
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            # convert to DataFrame
+            speakers_df = pd.read_json(speaker_tag)
+            full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
+                         + speakers_df.loc[:, 'middleinitial'] + ' '
+                         + speakers_df.loc[:, 'lastname'])
+            full_name_clean = full_name_raw.str.replace('\s+', ' ')
+            # transform series to a dict
+            speaker = full_name_clean.iloc[0]
+        except:
+            speaker = re.search(r"(?<=\"speaker_name\":)\"(.*?)\"", soup.text).group(1)
+        return speaker
 
     def get_all_speakers(self, soup):
         """Returns dict of all speakers per talk."""
-        speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
-        # convert to DataFrame
-        speakers_df = pd.read_json(speaker_tag)
-        full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
-                     + speakers_df.loc[:, 'middleinitial'] + ' '
-                     + speakers_df.loc[:, 'lastname'])
-        full_name_clean = full_name_raw.str.replace('\s+', ' ')
-        # transform series to a dict
-        speakers = full_name_clean.to_dict()
+        try:
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            # convert to DataFrame
+            speakers_df = pd.read_json(speaker_tag)
+            full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
+                         + speakers_df.loc[:, 'middleinitial'] + ' '
+                         + speakers_df.loc[:, 'lastname'])
+            full_name_clean = full_name_raw.str.replace('\s+', ' ')
+            # transform series to a dict
+            speakers = full_name_clean.to_dict()
+        except:
+            speakers = None
         return speakers
 
     def get_occupations(self, soup):
         """Returns list of the occupation(s) of the speaker(s) per talk."""
-        occupations_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
-        # convert json to DataFrame
-        occupations_series = pd.read_json(occupations_tag)['description']
-        if occupations_series.all():
-            # clean and create dict
-            occupations = occupations_series.str.lower().str.split(', ')
-            occupations = occupations.to_dict()
-        else:
+        try:
+            occupations_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            # convert json to DataFrame
+            occupations_series = pd.read_json(occupations_tag)['description']
+            if occupations_series.all():
+                # clean and create dict
+                occupations = occupations_series.str.lower().str.split(', ')
+                occupations = occupations.to_dict()
+            else:
+                occupations = None
+        except:
             occupations = None
         return occupations
 
     def get_about_speakers(self, soup):
         """Returns dict with each 'About the Speaker' blurb per talk."""
-        speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
-        # convert to DataFrame
-        about_series = pd.read_json(speaker_tag)['whotheyare']
-        if about_series.all():
-            # transform series to a dict
-            about_speakers = about_series.to_dict()
-        else:
+        try:
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            # convert to DataFrame
+            about_series = pd.read_json(speaker_tag)['whotheyare']
+            if about_series.all():
+                # transform series to a dict
+                about_speakers = about_series.to_dict()
+            else:
+                about_speakers = None
+        except:
             about_speakers = None
         return about_speakers
 
@@ -169,7 +178,10 @@ class TalkFeatures(SoupMaker):
 
     def get_recorded_date(self, soup):
         """Returns date a talk was recorded."""
-        recorded_at = re.search(r"(?<=\"recorded_at\":\")[\d-]+", soup.text).group(0)
+        try:
+            recorded_at = re.search(r"(?<=\"recorded_at\":\")[\d-]+", soup.text).group(0)
+        except:
+            recorded_at = None
         return recorded_at
 
     def get_published_date(self, soup):
@@ -336,7 +348,7 @@ class URLs(SoupMaker):
     
     def url_issues(self):
         """Returns DataFrame of urls with known issues."""
-        issues_df = pd.read_csv('../data/urls_issues.csv')
+        issues_df = pd.read_csv('../data/known_issues.csv')
         return issues_df
     
     def remove_urls_with_issues(self):
@@ -345,7 +357,7 @@ class URLs(SoupMaker):
         final_urls = []
         removed_urls = []
         removed_counter = 0
-        issues_df = pd.read_csv('../data/urls_issues.csv')
+        issues_df = pd.read_csv('../data/known_issues.csv')
         for url in urls:
             try:
                 base_url = url.replace('transcript?language=' + self.lang_code, '')
@@ -516,9 +528,11 @@ class TEDscraper(TalkFeatures, URLs):
         return self.ted_dict
     
     def to_dataframe(self, ted_dict):
-        """Creates DataFrame object from dict."""
+        """Returns sorted DataFrame object from dict."""
         df = pd.DataFrame.from_dict(ted_dict, orient='index')
-        return df
+        df = df.sort_values(by='published_date')
+        sorted_df = df.reset_index(drop=True)
+        return sorted_df
 
 
 # # Get Data
@@ -526,6 +540,6 @@ class TEDscraper(TalkFeatures, URLs):
 # In[ ]:
 
 
-# # english
+# english
 # scraper_en = TEDscraper()
 # ted_dict = scraper_en.get_data()
