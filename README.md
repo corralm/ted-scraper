@@ -3,22 +3,23 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
-[BeautifulSoup 4](https://pypi.org/project/beautifulsoup4/)  
-[Jupyter Notebook](https://jupyter.org/)
+[Requests](https://2.python-requests.org/en/master/)  
+[Beautiful Soup 4](https://pypi.org/project/beautifulsoup4/)  
+[fake-useragent](https://pypi.org/project/fake-useragent/)  
+[Pandas](https://pandas.pydata.org/)
 
 ## Usage
 ```python
-# instantiate the scraper
-# pass in optional arguments
+# instantiate the scraper & pass in optional arguments
 scraper = TEDscraper(lang_code='en', urls='all', topics='all')
 
-# scrape the data
+# scrape the data and save it to a dictionary
 ted_dict = scraper.get_data()
 
-# transform dict to pandas DataFrame
-df = pd.DataFrame.from_dict(ted_dict, orient='index')
+# transform the dictionary to a pandas DataFrame
+df = scraper.to_dataframe(ted_dict)
 
-# output as CSV
+# output DataFrame as CSV
 df.to_csv('../data/ted_talks.csv', index=False)
 ```
 Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html#serialization-io-conversion).
@@ -78,7 +79,7 @@ TED talks have been subtitled in over 100 languages. Here are the top languages:
 |-------|-----------------------|
 | en    | English               |
 | es    | Spanish               |
-| pt-br | Portuguese (Brazil)   |
+| pt-br | Portuguese (Brazilian)|
 | fr    | French                |
 | it    | Italian               |
 | zh-cn | Chinese (simplified)  |
@@ -93,9 +94,17 @@ Here is a link to [all language codes available as of April 2020](../data/langua
 
 You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
 
-## Acknowledgements
+## Meta
+Miguel Corral Jr. - corraljrmiguel@gmail.com
+https://github.com/corralm
+
+Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
+
 The data has been scraped from the official TED Website and is available under the Creative Commons License.
 
-## License
-This project is licensed under the terms of the
-[MIT license](LICENSE).
+## Contributing
+1. Fork it (<https://github.com/yourname/yourproject/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
