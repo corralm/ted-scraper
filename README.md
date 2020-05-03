@@ -1,7 +1,7 @@
 # TED-Talks-Scraper
 Scrape TED talk data including transcripts in over 100 languages from TED.com
 
-![](header.png)
+![](img/example.gif)
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
@@ -12,6 +12,9 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Usage
 ```python
+# import module (or use Jupyter Notebook)
+from TEDscraper import TEDscraper
+
 # instantiate the scraper & pass in optional arguments
 scraper = TEDscraper(lang_code='en', urls='all', topics='all')
 
