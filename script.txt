@@ -1,5 +1,0 @@
-"""TedScraper
-Created: 2020-04-15
-Updated: –
-Author: Miguel Corral Jr.
-"""
