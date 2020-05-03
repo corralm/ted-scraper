@@ -97,8 +97,10 @@ Here is a link to [all language codes available as of April 2020](../data/langua
 You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
 
 ## Meta
-Miguel Corral Jr. - corraljrmiguel@gmail.com
-https://github.com/corralm
+Author: Miguel Corral Jr.  
+Email: corraljrmiguel@gmail.com  
+LinkedIn: https://www.linkedin.com/in/miguelcorraljr/  
+GitHub: https://github.com/corralm
 
 Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
 
