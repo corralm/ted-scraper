@@ -1,7 +1,7 @@
 # TED-Talks-Scraper
 Scrape TED talk data including transcripts in over 100 languages from TED.com
 
-![](header.png)
+![](img/example.gif)
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
@@ -12,6 +12,9 @@ Scrape TED talk data including transcripts in over 100 languages from TED.com
 
 ## Usage
 ```python
+# import module (or use Jupyter Notebook)
+from TEDscraper import TEDscraper
+
 # instantiate the scraper & pass in optional arguments
 scraper = TEDscraper(lang_code='en', urls='all', topics='all')
 
@@ -97,8 +100,10 @@ Here is a link to [all language codes available as of April 2020](../data/langua
 You can see all the talks for each language at [TED – Our Languages](https://www.ted.com/participate/translate/our-languages 'TED languages').
 
 ## Meta
-Miguel Corral Jr. - corraljrmiguel@gmail.com
-https://github.com/corralm
+Author: Miguel Corral Jr.  
+Email: corraljrmiguel@gmail.com  
+LinkedIn: https://www.linkedin.com/in/miguelcorraljr/  
+GitHub: https://github.com/corralm
 
 Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
 

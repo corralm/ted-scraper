@@ -6,13 +6,14 @@
 # In[ ]:
 
 
+import random
 import re
 import time
-import random
-import requests
+
 from bs4 import BeautifulSoup
-from fake_useragent import UserAgent
 import pandas as pd
+import requests
+from fake_useragent import UserAgent
 
 
 # ## Soup Maker
@@ -81,10 +82,6 @@ class CreateCSV(SoupMaker):
                 lang_list.append([lang_code] + [lang_name])
         lang_df = pd.DataFrame(data=lang_list, columns=['lang_code', 'language'])
         lang_df.to_csv('../data/languages.csv', index=False)
-        
-    def create_dataset(self, DataFrame):
-        """Creates CSV from a DataFrame."""
-        pass
 
 
 # ## Talk Features
@@ -98,7 +95,7 @@ class TalkFeatures(SoupMaker):
 
     def get_talk_id(self, soup):
         """Returns the talk_id provided by TED."""
-        talk_id = re.search(r"(?<=\"current_talk\":)\"(\d+)\"", soup.text).group(1)
+        talk_id = re.search(r"(?<=\"current_talk\":)\"(\d+)\"", str(soup)).group(1)
         return talk_id
 
     def get_title(self, soup):
@@ -111,7 +108,7 @@ class TalkFeatures(SoupMaker):
     def get_speaker_1(self, soup):
         """Returns the first speaker in TED's speaker list."""
         try:
-            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", str(soup))[0]
             # convert to DataFrame
             speakers_df = pd.read_json(speaker_tag)
             full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
@@ -121,13 +118,13 @@ class TalkFeatures(SoupMaker):
             # transform series to a dict
             speaker = full_name_clean.iloc[0]
         except:
-            speaker = re.search(r"(?<=\"speaker_name\":)\"(.*?)\"", soup.text).group(1)
+            speaker = re.search(r"(?<=\"speaker_name\":)\"(.*?)\"", str(soup)).group(1)
         return speaker
 
     def get_all_speakers(self, soup):
         """Returns dict of all speakers per talk."""
         try:
-            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", str(soup))[0]
             # convert to DataFrame
             speakers_df = pd.read_json(speaker_tag)
             full_name_raw = (speakers_df.loc[:, 'firstname'] + ' '
@@ -143,7 +140,7 @@ class TalkFeatures(SoupMaker):
     def get_occupations(self, soup):
         """Returns list of the occupation(s) of the speaker(s) per talk."""
         try:
-            occupations_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            occupations_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", str(soup))[0]
             # convert json to DataFrame
             occupations_series = pd.read_json(occupations_tag)['description']
             if occupations_series.all():
@@ -159,7 +156,7 @@ class TalkFeatures(SoupMaker):
     def get_about_speakers(self, soup):
         """Returns dict with each 'About the Speaker' blurb per talk."""
         try:
-            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", soup.text)[0]
+            speaker_tag = re.findall(r"(?<=\"speakers\":).*?\"}]", str(soup))[0]
             # convert to DataFrame
             about_series = pd.read_json(speaker_tag)['whotheyare']
             if about_series.all():
@@ -173,13 +170,14 @@ class TalkFeatures(SoupMaker):
 
     def get_views(self, soup):
         """Returns viewed count per talk."""
-        view_count = re.search(r"(?<=\"viewed_count\":)\d+", soup.text).group(0)
+        view_count = re.search(r"(?<=\"viewed_count\":)\d+", str(soup)).group(0)
         return view_count
 
     def get_recorded_date(self, soup):
         """Returns date a talk was recorded."""
         try:
-            recorded_at = re.search(r"(?<=\"recorded_at\":\")[\d-]+", soup.text).group(0)
+            tag = re.search(r"(?<=\"recorded_at\":\")[\d-]+", str(soup))
+            recorded_at = tag.group(0)
         except:
             recorded_at = None
         return recorded_at
@@ -192,42 +190,42 @@ class TalkFeatures(SoupMaker):
 
     def get_event(self, soup):
         """Returns name of the event in which the talk was given."""
-        event = re.search(r"(?<=\"event\":)\"(.*?)\"", soup.text).group(1)
+        event = re.search(r"(?<=\"event\":)\"(.*?)\"", str(soup)).group(1)
         return event
     
     def get_native_lang(self, soup):
         """Returns native language code for each talk as a string."""
-        native_lang = re.search(r'(?<=nativeLanguage\":)\"(.*?)\"', soup.text).group(1)
+        native_lang = re.search(r'(?<=nativeLanguage\":)\"(.*?)\"', str(soup)).group(1)
         return native_lang
     
     def get_available_lang(self, soup):
         """Returns list of all available languages (lang codes) for a talk."""
-        languages = re.findall(r'(?<=languageCode\":)\"(.*?)\"', soup.text)
+        languages = re.findall(r'(?<=languageCode\":)\"(.*?)\"', str(soup))
         clean_lang = sorted(list(set(languages)))
         return clean_lang
 
     def get_comments_count(self, soup):
         """Return the count of comments per talk."""
         try:
-            comments_count = re.search(r"(?<=\"count\":)(\d+)", soup.text).group(1)
+            comments_count = re.search(r"(?<=\"count\":)(\d+)", str(soup)).group(1)
         except AttributeError:
             comments_count = None
         return comments_count
 
     def get_duration(self, soup):
         """Returns duration of a talk in seconds."""
-        duration =  re.search(r"(?<=\"duration\":)(\d+)", soup.text).group(1)
+        duration =  re.search(r"(?<=\"duration\":)(\d+)", str(soup)).group(1)
         return duration
 
     def get_topics(self, soup):
         """Returns list of tags (topics) per talk."""
-        match_obj = re.search(r"\"tag\":\"(.*?)\"", soup.text)
+        match_obj = re.search(r"\"tag\":\"(.*?)\"", str(soup))
         topics = match_obj.group(1).split(',')
         return topics
 
     def get_related_talks(self, soup):
         """Returns dict (keys: id & title) of related talks."""
-        related_tag = re.search(r"(?<=\"related_talks\":).*?]", soup.text).group(0)
+        related_tag = re.search(r"(?<=\"related_talks\":).*?]", str(soup)).group(0)
         related_sr = pd.read_json(related_tag)
         related_talks = dict(zip(related_sr['id'], related_sr['title']))
         return related_talks
@@ -533,13 +531,3 @@ class TEDscraper(TalkFeatures, URLs):
         df = df.sort_values(by='published_date')
         sorted_df = df.reset_index(drop=True)
         return sorted_df
-
-
-# # Get Data
-
-# In[ ]:
-
-
-# english
-# scraper_en = TEDscraper()
-# ted_dict = scraper_en.get_data()
