@@ -1,6 +1,5 @@
 # TED-Talks-Scraper
-Scrape TED talk data including transcripts in over 100 languages from TED.com
-
+Scrape TED talk data including transcripts in over 100 languages from TED.com  
 ![](header.gif)
 
 ## Requirements
