@@ -17,3 +17,10 @@
 
 # python
 *.pyc
+
+# datasets
+/datasets
+
+# coverage
+.coverage
+
