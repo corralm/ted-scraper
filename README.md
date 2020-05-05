@@ -60,9 +60,9 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
 | talk_id          | Talk identification number provided by TED      | int        |
 | title            | Title of the talk                               | string     |
 | speaker_1        | First speaker in TED's speaker list             | string     |
-| speakers         | Speakers in the talk (one or many)              | dictionary |
-| occupations      | *Occupations of the speakers (none, one or many)| dictionary |
-| about_speakers   | *Blurb about each speaker (none, one or many)   | dictionary |
+| speakers         | Speakers in the talk                            | dictionary |
+| occupations      | *Occupations of the speakers                    | dictionary |
+| about_speakers   | *Blurb about each speaker                       | dictionary |
 | views            | Count of views                                  | int        |
 | recorded_date    | Date the talk was recorded                      | string     |
 | published_date   | Date the talk was published to TED.com          | string     |
@@ -72,9 +72,9 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
 | comments         | Count of comments                               | int        |
 | duration         | Duration in seconds                             | int        |
 | topics           | Related tags or topics for the talk             | list       |
-| description      | Description of the talk                         | string     |
 | related_talks    | Related talks (key='talk_id', value='title')    | dictionary |
-| url              | Url of the talk                                 | string     |
+| url              | URL of the talk                                 | string     |
+| description      | Description of the talk                         | string     |
 | transcript       | Full transcript of the talk                     | string     |
 
 *The dictionary key maps to the speaker in ‘speakers’.
