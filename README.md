@@ -107,7 +107,7 @@ GitHub: https://github.com/corralm
 
 Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
 
-The data has been scraped from the official TED Website and is available under the Creative Commons License.
+
 
 ## Contributing
 1. Fork it (<https://github.com/yourname/yourproject/fork>)
