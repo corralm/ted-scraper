@@ -46,7 +46,7 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
 * **force_fetch**
     * Talks with known issues are skipped by default `force_fetch=False`
     * Set it to 'True' to attempt to scrape
-    * See [talks with known issues](../data/urls_issues.csv)
+    * See [talks with known issues](../data/known_issues.csv)
 * **exclude_transcript**
     * All features are scraped by default `exclude_transcript=False`
     * Set it to 'True' to exclude the transcript
