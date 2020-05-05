@@ -1,7 +1,9 @@
 # TEDscraper
-Scrape TED talk data including transcripts in over 100 languages from TED.com  
+Scrape TED talk data including transcripts in over 100 languages from [TED.com](https://www.ted.com/)
 
-![](header.gif)
+![](./images/ted_github_banner.png)
+
+![](./images/header.gif)
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
@@ -106,8 +108,6 @@ LinkedIn: https://www.linkedin.com/in/miguelcorraljr/
 GitHub: https://github.com/corralm
 
 Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
-
-
 
 ## Contributing
 1. Fork it (<https://github.com/yourname/yourproject/fork>)
