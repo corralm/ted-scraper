@@ -14,6 +14,7 @@ Scrape TED talk data including transcripts in over 100 languages from [TED.com](
 
 ## Usage
 ```python
+# move to TEDscraper directory
 # import module (or use Jupyter Notebook)
 from TEDscraper import TEDscraper
 
