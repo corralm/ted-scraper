@@ -54,9 +54,9 @@ Here is a list of other output formats [Pandas docs](https://pandas.pydata.org/p
     * All features are scraped by default `exclude_transcript=False`
     * Set it to 'True' to exclude the transcript
 
-## Features
+## Attributes
 
-| Feature          | Description                                     | Data Type  |
+| Attribute        | Description                                     | Data Type  |
 |------------------|-------------------------------------------------|------------|
 | talk_id          | Talk identification number provided by TED      | int        |
 | title            | Title of the talk                               | string     |
