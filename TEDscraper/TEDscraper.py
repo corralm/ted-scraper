@@ -46,6 +46,15 @@ class SoupMaker:
         soup = BeautifulSoup(page.content, 'lxml')
         return soup
 
+    def taste_soup(self, soup):
+        """Taste test soup object."""
+        try:
+            taster = soup.title.text
+            bad_soup = re.search(r'404: Not Found', taster)
+        except AttributeError:
+            bad_soup = None
+        return bad_soup
+
 
 # ## CreateCSV
 
@@ -351,7 +360,7 @@ class URLs(SoupMaker):
     
     def remove_urls_with_issues(self):
         """Remove urls with known issues to prevent unnecessary scraping."""
-        urls = self.url_attribute()
+        urls = self.all_urls()
         final_urls = []
         removed_urls = []
         removed_counter = 0
@@ -382,6 +391,38 @@ class URLs(SoupMaker):
                   "known issues:\n", removed_urls, end='\n\n')
         return final_urls
 
+    def all_urls(self):
+        """Return all urls based on parameter 'urls' without removing."""
+        # define url attribute
+        if self.urls == 'all':
+            urls = self.get_all_urls()
+        else:
+            if isinstance(self.urls, list):
+                urls = self.clean_urls(self.urls)
+            else:
+                raise ValueError("'urls' param needs to be a list")
+        return urls
+
+    def final_urls(self):
+        """Return final urls to fetch."""
+        # define url attribute
+        if self.force_fetch:
+            urls = self.all_urls()
+        else:
+            urls = self.remove_urls_with_issues()  
+        return urls
+
+    def seen_urls(self, url, attempt):
+        """Returns attempt depending on seen urls for urls that fail."""
+        if url not in self.seen:
+            yield url
+            seen.add(url)
+        # if the url was appended earlier after 2 failed attempts
+        # it means this is the last attempt (3)
+        elif url in self.seen and attempt == 1:
+            attempt = 3
+        return attempt
+
 
 # ## TEDscraper
 
@@ -401,7 +442,7 @@ class TEDscraper(TalkFeatures, URLs):
         dict_id (int): Index of nested dict in 'ted_dict'.
         failed_counter: Counts urls that failed to get scraped.
     """
-    
+ 
 
     def __init__(self, lang_code='en', urls='all', topics='all',
                  force_fetch = False, exclude_transcript=False):
@@ -415,32 +456,11 @@ class TEDscraper(TalkFeatures, URLs):
         self.failed_counter = 0
         self.failed_urls = []
         self.force_fetch = force_fetch
+        self.seen = set()
         self.base_url = ('https://www.ted.com/talks'
                          + '?language=' + self.lang_code
                          + self.topics_url_param())
-        
-    def url_attribute(self):
-        """Define urls attribute based on parameter 'urls'."""
-        # define url attribute
-        if self.urls == 'all':
-            urls = self.get_all_urls()
-        else:
-            if isinstance(self.urls, list):
-                urls = self.clean_urls(self.urls)
-            else:
-                raise ValueError("'urls' param needs to be a list")
-        return urls
 
-    def convert_lang_code(self):
-        """Reads languages.csv and returns language.
-        Parameters:
-            lang_code (str): Language code
-        """
-        df = pd.read_csv('../data/languages.csv')
-        lang_series = df.loc[(df['lang_code'] == self.lang_code), 'language']
-        language = lang_series.values[0]
-        return language
-    
     def scrape_all_features(self, soup):
         """Scrapes all features to a nested dict."""
         # create nested dict
@@ -473,58 +493,70 @@ class TEDscraper(TalkFeatures, URLs):
     def get_data(self):
         """Returns nested dictionary of features from each talk's transcript page."""
         print("Fetching urls...\n")
-        # define url attribute
-        if self.force_fetch:
-            urls = self.url_attribute()
-        else:
-            urls = self.remove_urls_with_issues()
+        urls = self.final_urls()
         print(f"Scraping {len(urls)} TED talks in '{self.language}'...")
         print(f"Estimated time to complete is {round((.9*len(urls)/60), 1)} minutes\n")
-        # iterate through each ted talk transcript url
+        # iterate through each TED talk transcript url
         for url in urls:
-            # make soup
-            soup = self.make_soup(url)
-            # taste soup
-            taster = soup.title.text
-            bad_soup = re.search(r'404: Not Found', taster)
-            if bad_soup:
-                print(f"[BAD_SOUP] {self.lang_code} {url}")
-                self.failed_urls.append(url)
-                self.failed_counter += 1
-                continue
-            # delay between searches
+            # delay between each scrape
             self.sleep_short()
-            # try up to three attempts to scrape data
-            for attempt in range(1, 3+1):
+            # try up to three attempts
+            for i in range(1, 4):
+                # check if url has been seen, if true:
+                # it means it previously failed twice so make it the final attempt
+                attempt = self.seen_urls(url, i)
                 try:
+                    # make soup
+                    soup = self.make_soup(url)                                        
                     # create nested dict
                     self.ted_dict[self.dict_id] = {}
                     # scrape features and add to a nested dict
                     self.scrape_all_features(soup)
+                except Exception as e:
+                    # taste if it's a bad soup
+                    if self.taste_soup(soup):
+                        print(f"[BAD_SOUP] {url}")
+                        self.failed_urls.append(url)
+                        self.failed_counter += 1
+                        break
+                    elif attempt == 1:
+                        # 3-5 second delay before another attempt
+                        self.sleep_five()
+                        continue
+                    elif attempt == 2:
+                        # append the url to 'urls' to try again later
+                        urls.append(url)
+                        break
+                    elif attempt == 3:
+                        print(f"[EXCEPTION] {e} {url}")
+                        self.failed_counter += 1
+                        self.failed_urls.append(url)
+                        break
+                else:
                     # indicate successful scrape
                     print(f"[OK] {self.dict_id} {url}")
                     # add 1 to create a new nested dict
                     self.dict_id += 1
-                except Exception as e:
-                    # if the last attempt fails, update the failed counter
-                    # and print the exception & talk url
-                    if attempt == 3:
-                        self.failed_counter += 1
-                        self.failed_urls.append(url)
-                        print(f"[EXCEPTION] {e} {url}")
-                        continue
-                    # delay before another attempt
-                    self.sleep_five()
-                # break if no exceptions are raised
-                else:
+                    # exit attempts loop
                     break
+        # print results
         print(f"""\nTed.com scraping results:
             \n\t• Successful: {self.dict_id}
             \n\t• Failed: {self.failed_counter}\n""")
         if self.failed_counter:
             print(f"Failed to scrape:\n{self.failed_urls}\n")
         return self.ted_dict
-    
+
+    def convert_lang_code(self):
+        """Reads languages.csv and returns language.
+        Parameters:
+            lang_code (str): Language code
+        """
+        df = pd.read_csv('../data/languages.csv')
+        lang_series = df.loc[(df['lang_code'] == self.lang_code), 'language']
+        language = lang_series.values[0]
+        return language
+
     def to_dataframe(self, ted_dict):
         """Returns sorted DataFrame object from dict."""
         df = pd.DataFrame.from_dict(ted_dict, orient='index')
