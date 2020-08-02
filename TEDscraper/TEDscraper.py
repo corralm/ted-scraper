@@ -244,6 +244,20 @@ class TalkFeatures(SoupMaker):
         talk_tag = soup.find(attrs={'property': 'og:url'}).attrs['content']
         talk_url = talk_tag.split('transcript')[0]
         return talk_url
+    
+    def get_photo_url(self, soup):
+        """Returns dict of url profile photos for each speaker."""
+        try:
+            raw_urls = re.findall(r"(?<=\"photo_url\":)\"(.*?)\"", str(soup))
+            seen = []
+            photo_dict = {}
+            for idx, url in enumerate(raw_urls):
+                if url not in seen:
+                    photo_dict[idx] = url
+                    seen.append(url)
+        except:
+            photo_dict = None
+        return photo_dict
 
     def get_description(self, soup):
         """Returns description of the talk."""
@@ -484,6 +498,7 @@ class TEDscraper(TalkFeatures, URLs):
         nested_dict['topics'] = self.get_topics(soup)
         nested_dict['related_talks'] = self.get_related_talks(soup)
         nested_dict['url'] = self.get_talk_url(soup)
+        nested_dict['photo_urls'] = self.get_photo_url(soup)
         nested_dict['description'] = self.get_description(soup)
         # add transcript if param is set to False (default)
         if not self.exclude:
