@@ -1,3 +1,5 @@
+**NOTE**: This script no longer works after some changes were made on TED.com. I may fix it eventually...
+
 # TEDscraper
 Scrape TED talk data including transcripts in over 100 languages from [TED.com](https://www.ted.com/)
 
@@ -7,10 +9,11 @@ Scrape TED talk data including transcripts in over 100 languages from [TED.com](
 
 ## Requirements
 [Python 3](https://www.python.org/downloads/)  
-[Requests](https://2.python-requests.org/en/master/)  
 [Beautiful Soup 4](https://pypi.org/project/beautifulsoup4/)  
 [fake-useragent](https://pypi.org/project/fake-useragent/)  
-[Pandas](https://pandas.pydata.org/)
+[lxml](https://pypi.org/project/lxml/)  
+[Pandas](https://pandas.pydata.org/)  
+[Requests](https://2.python-requests.org/en/master/)  
 
 ## Usage
 ```python
