@@ -7,3 +7,6 @@ NEWSPIDER_MODULE = 'TEDscraper2.spiders'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
+# Add 250ms wait before downloading consecutive pages
+DOWNLOAD_DELAY = 0.25
