@@ -1,4 +1,4 @@
-**NOTE**: This script no longer works after some changes were made on TED.com. I may fix it eventually...
+[Deprecated] Use [TEDscraper2](https://github.com/corralm/TEDscraper/tree/main/TEDscraper2) instead.
 
 # TEDscraper
 Scrape TED talk data including transcripts in over 100 languages from [TED.com](https://www.ted.com/)
