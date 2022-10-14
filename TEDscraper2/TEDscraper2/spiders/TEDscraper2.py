@@ -15,8 +15,8 @@ class TEDscraper(scrapy.Spider):
         yield from response.follow_all(talks_page_links, self.parse_talk)
 
         # looks for the link to the next page, builds a URL and yields a new request to the next page
-        # pagination_links = response.css(".pagination__next")
-        # yield from response.follow_all(pagination_links, self.parse)
+        pagination_links = response.css(".pagination__next")
+        yield from response.follow_all(pagination_links, self.parse)
 
     
     def parse_talk(self, response):
