@@ -5,10 +5,7 @@ import scrapy
 class TEDscraper(scrapy.Spider):
     """Recursively crawls ted.com/talks and extracts talk data."""
     name = 'TEDscraper'
-    start_urls = [
-        # 'https://www.ted.com/talks?page=1'
-        f'https://www.ted.com/talks?page={i}' for i in range(2, 3)
-    ]
+    start_urls = ['https://www.ted.com/talks?page=1']
 
     def parse(self, response):
         """Recursively follows links to all TED talks and extracts data from them."""
