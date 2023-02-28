@@ -108,7 +108,7 @@ You can see all the talks for each language at [TED – Our Languages](https://w
 ## Meta
 Author: Miguel Corral Jr.  
 Email: corraljrmiguel@gmail.com  
-LinkedIn: https://www.linkedin.com/in/iMiguel 
+LinkedIn: https://www.linkedin.com/in/iMiguel   
 GitHub: https://github.com/corralm
 
 Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
